@@ -21,3 +21,18 @@ CREATE TABLE business(
     BusinessImage TEXT,
     IsTrading BOOLEAN
 );
+
+CREATE TABLE product(
+    BusinessId INTEGER,
+    ProductId SERIAL PRIMARY KEY NOT NULL, 
+    ProductName VARCHAR(25),
+    ProductType VARCHAR(25),
+    ProductDescription VARCHAR(50),
+    ProductImage TEXT, 
+    ProductPrice MONEY, 
+    UnitSize TEXT, 
+    Quantity INTEGER,     
+    CONSTRAINT fk_business
+        FOREIGN KEY(BusinessId)
+            REFERENCES business(Id)
+);

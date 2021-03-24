@@ -11,7 +11,7 @@ public class BusinessRepository : BaseRepository, IRepository<Business>
     {
         using var connection = CreateConnection();
         //update sql query once table is set
-        return await connection.QueryAsync<Business>("SELECT * FROM Business;");
+        return await connection.QueryAsync<Business>("SELECT * FROM Business INNER JOIN Product ON id = BusinessId;");
     }
 
     public void Delete(long id)
