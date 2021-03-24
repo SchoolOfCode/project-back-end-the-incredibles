@@ -17,7 +17,7 @@ public class BusinessRepository : BaseRepository, IRepository<Business>
     public void Delete(long id)
     {
         using var connection = CreateConnection();
-        connection.Execute("DELETE FROM Busienss WHERE Id=@Id;", new {Id = id});
+        connection.Execute("DELETE FROM Business WHERE Id=@Id;", new {Id = id});
     }
 
     public async Task<Business> Get (long id)
@@ -31,19 +31,20 @@ public class BusinessRepository : BaseRepository, IRepository<Business>
      public async Task<Business> Update(Business Business)
     {
         using var connection = CreateConnection();
-        return await connection.QuerySingleAsync<Business>("UPDATE Business SET Date = @Date, Title = @Title, Description = @Description, Industry = @Industry WHERE Id = @Id RETURNING *", Business);
+        return await connection.QuerySingleAsync<Business>("UPDATE Business SET BusinessName = @BusinessName, PrimaryContact = @PrimaryContact, AddrBuildingName = @AddrBuildingName, AddrBuildingNumber = @AddrBuildingNumber, AddrStreet = @AddrStreet, AddrCity = @AddrCity, AddrCounty = @AddrCounty, AddrPostcode = @AddrPostcode, TelephoneNumber = @TelephoneNumber, TwitterHandle = @TwitterHandle, SocialmediaLink = @SocialmediaLink, BusinessImage = @BusinessImage, IsTrading = @IsTrading WHERE Id = @Id RETURNING *", Business);
     }
 
     public async Task<Business> Insert(Business Business)
     {
         using var connection = CreateConnection();
-        return await connection.QuerySingleAsync<Business>("INSERT INTO Business (Date, Title, Description, Industry) VALUES (@Date, @Title, @Description, @Industry) RETURNING *;", Business);
+        return await connection.QuerySingleAsync<Business>("INSERT INTO Business (BusinessName, PrimaryContact, AddrBuildingName, AddrBuildingNumber, AddrStreet, AddrCity, AddrCounty, AddrPostcode,TelephoneNumber,TwitterHandle,SocialmediaLink,BusinessImage,IsTrading) VALUES (@BusinessName, @PrimaryContact, @AddrBuildingName, @AddrBuildingNumber, @AddrStreet, @AddrCity,@AddrCounty, @AddrPostcode, @TelephoneNumber, @TwitterHandle,@SocialmediaLink, @BusinessImage, @IsTrading) RETURNING *;", Business);
     }
 
+    // this is vacant for our business database
     public async Task<IEnumerable<Business>> Search(string query)
     {
         using var connection = CreateConnection();
-        return await connection.QueryAsync<Business>("SELECT * FROM Business WHERE Title ILIKE @Query OR Description ILIKE @Query OR Industry ILIKE @Query;", new { Query = $"%{query}%" });
+        return await connection.QueryAsync<Business>("SELECT * FROM Business WHERE BusinessName ILIKE @Query;", new { Query = $"%{query}%" });
     }
 
 }
