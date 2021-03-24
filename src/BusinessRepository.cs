@@ -14,10 +14,11 @@ public class BusinessRepository : BaseRepository, IRepository<Business>
         return await connection.QueryAsync<Business>("SELECT * FROM Business INNER JOIN Product ON id = BusinessId;");
     }
 
-    public void Delete(long id)
+//Delete certain products from product table by ProductId
+    public void Delete(long ProductId)
     {
         using var connection = CreateConnection();
-        connection.Execute("DELETE FROM Business WHERE Id=@Id;", new {Id = id});
+        connection.Execute("DELETE FROM Product WHERE ProductId=@ProductId;", new {ProductId = ProductId});
     }
 
     public async Task<Business> Get (long id)

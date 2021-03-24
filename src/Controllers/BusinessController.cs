@@ -78,13 +78,13 @@ public class BusinessController : ControllerBase
         }
     }
     //Delete{id} -> Delete
-    [HttpDelete("{id}")]
-    public IActionResult Delete(long id)
+    [HttpDelete("{ProductId}")]
+    public IActionResult Delete(long ProductId)
     {
         try
         {
-            _businessRepository.Delete(id);
-            return Ok($"Business at {id} is deleted");
+            _businessRepository.Delete(ProductId);
+            return Ok($"Business at {ProductId} is deleted");
         }
         catch(Exception)
         {
