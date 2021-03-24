@@ -32,7 +32,7 @@ public class BusinessRepository : BaseRepository, IRepository<Business>
      public async Task<Business> Update(Business Business)
     {
         using var connection = CreateConnection();
-        return await connection.QuerySingleAsync<Business>("UPDATE Business SET BusinessName = @BusinessName, PrimaryContact = @PrimaryContact, AddrBuildingName = @AddrBuildingName, AddrBuildingNumber = @AddrBuildingNumber, AddrStreet = @AddrStreet, AddrCity = @AddrCity, AddrCounty = @AddrCounty, AddrPostcode = @AddrPostcode, TelephoneNumber = @TelephoneNumber, TwitterHandle = @TwitterHandle, SocialmediaLink = @SocialmediaLink, BusinessImage = @BusinessImage, IsTrading = @IsTrading WHERE Id = @Id RETURNING *", Business);
+        return await connection.QuerySingleAsync<Business>("UPDATE Business INNER JOIN Product ON Id=BusinessId SET BusinessName = @BusinessName, PrimaryContact = @PrimaryContact, AddrBuildingName = @AddrBuildingName, AddrBuildingNumber = @AddrBuildingNumber, AddrStreet = @AddrStreet, AddrCity = @AddrCity, AddrCounty = @AddrCounty, AddrPostcode = @AddrPostcode, TelephoneNumber = @TelephoneNumber, TwitterHandle = @TwitterHandle, SocialmediaLink = @SocialmediaLink, BusinessImage = @BusinessImage, IsTrading = @IsTrading, ProductName = @ProductName  WHERE Id = @Id RETURNING *", Business);
     }
 
     public async Task<Business> Insert(Business Business)
