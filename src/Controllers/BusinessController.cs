@@ -40,11 +40,11 @@ public class BusinessController : ControllerBase
         }
     }
     //Get{Id} -> Get(id)
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(long id)
+    [HttpGet("{Id}")]
+    public async Task<IActionResult> GetById(long Id)
     {
         try{
-        var returnedBusiness = await _businessRepository.Get(id);
+        var returnedBusiness = await _businessRepository.Get(Id);
         return Ok(returnedBusiness);
         }
         catch (Exception){

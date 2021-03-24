@@ -21,10 +21,10 @@ public class BusinessRepository : BaseRepository, IRepository<Business>
         connection.Execute("DELETE FROM Product WHERE ProductId=@ProductId;", new {ProductId = ProductId});
     }
 
-    public async Task<Business> Get (long id)
+    public async Task<IEnumerable<Business>> Get (long Id)
     {
         using var connection = CreateConnection();
-        return await connection.QuerySingleAsync<Business>("SELECT * FROM Business WHERE Id= @Id;", new {Id = id});
+        return await connection.QueryAsync<Business>("SELECT * FROM Business INNER JOIN product on Id = BusinessId WHERE Id=@Id;", new {Id = Id});
     }
 
 

@@ -4,7 +4,7 @@ public interface IRepository<T>
 {
     Task<IEnumerable<T>> GetAll();
     void Delete(long ProductId);
-    Task<T> Get(long id);
+    Task<IEnumerable<T>> Get(long Id);
     Task<T> Update(T t);
     Task<T> Insert(T t);
     Task<IEnumerable<T>> Search(string s);
