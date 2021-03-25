@@ -15,7 +15,9 @@ public class BusinessController : ControllerBase
     {
         _businessRepository = businessRepository;
     }
-    //Get -> GetAll
+
+
+
     [HttpGet]
     public async Task<IActionResult> GetAll(string search = null)
     {
@@ -41,18 +43,8 @@ public class BusinessController : ControllerBase
             return NotFound("There are no businesses.");
         }
     }
-    //Get{Id} -> Get(id)
-    // [HttpGet("{Id}")]
-    // public async Task<IActionResult> GetById(long Id)
-    // {
-    //     try{
-    //     var returnedBusiness = await _businessRepository.Get(Id);
-    //     return Ok(returnedBusiness);
-    //     }
-    //     catch (Exception){
-    //     return BadRequest("Id not found");
-    //     }
-    // }
+   
+
     
     [HttpGet]
     [Route("[action]/{Id}")]
@@ -68,6 +60,7 @@ public class BusinessController : ControllerBase
     }
 
 
+
     [HttpGet]
     [Route("[action]/{Id}")]
     public async Task<IActionResult> GetbyProduct(long Id)
@@ -81,7 +74,8 @@ public class BusinessController : ControllerBase
         }
     }
 
-    //Put{id} -> Update(business)
+
+    
     [HttpPut]
     [Route("[action]/{Id}")]
     public async Task<IActionResult> UpdatebyBusiness(long id, [FromBody] Business business)
@@ -95,6 +89,8 @@ public class BusinessController : ControllerBase
         }
     }
 
+
+
     [HttpPut]
     [Route("[action]/{ProductId}")]
     public async Task<IActionResult> UpdatebyProduct(int ProductId, [FromBody] Business business)
@@ -107,9 +103,11 @@ public class BusinessController : ControllerBase
             return BadRequest("Id not found");
         }
     }
-    //Post -> Insert
+    
+
+
     [HttpPost]
-    [Route("[action]/{Id}")]
+    [Route("[action]")]
     public async Task<IActionResult> InsertbyBusiness([FromBody] Business business)
     {
         try 
@@ -123,8 +121,10 @@ public class BusinessController : ControllerBase
         }
     }
 
-     [HttpPost]
-     [Route("[action]/{Id}")]
+
+
+    [HttpPost]
+    [Route("[action]")]
     public async Task<IActionResult> InsertbyProduct([FromBody] Business business)
     {
         try 
@@ -137,14 +137,34 @@ public class BusinessController : ControllerBase
             return BadRequest("Business entered is not valid");
         }
     }
-    //Delete{id} -> Delete
-    [HttpDelete("{ProductId}")]
-    public IActionResult Delete(long ProductId)
+
+
+
+    [HttpDelete]
+    [Route("[action]/{Id}")]
+    public IActionResult DeletebyBusiness(long Id)
     {
         try
         {
-            _businessRepository.Delete(ProductId);
-            return Ok($"Business at {ProductId} is deleted");
+            _businessRepository.DeletebyBusiness(Id);
+            return Ok($"Business at {Id} is deleted");
+        }
+        catch(Exception)
+        {
+            return BadRequest("Id is not valid");
+        }
+    }
+
+
+
+    [HttpDelete]
+    [Route("[action]/{ProductId}")]
+    public IActionResult DeletebyProduct(long ProductId)
+    {
+        try
+        {
+            _businessRepository.DeletebyProduct(ProductId);
+            return Ok($"Product at {ProductId} is deleted");
         }
         catch(Exception)
         {
