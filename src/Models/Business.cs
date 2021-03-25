@@ -51,4 +51,3 @@ public class Business
     public int Quantity {get; set; }
 
 }
-

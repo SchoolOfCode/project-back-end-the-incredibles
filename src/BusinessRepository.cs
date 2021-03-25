@@ -21,21 +21,48 @@ public class BusinessRepository : BaseRepository, IRepository<Business>
         connection.Execute("DELETE FROM Product WHERE ProductId=@ProductId;", new {ProductId = ProductId});
     }
 
-    public async Task<IEnumerable<Business>> Get (long Id)
+    // public async Task<IEnumerable<Business>> Get (long Id)
+    // {
+    //     using var connection = CreateConnection();
+    //     return await connection.QueryAsync<Business>("SELECT * FROM Business INNER JOIN product on Id = BusinessId WHERE Id=@Id;", new {Id = Id});
+    // }
+
+
+    public async Task<Business> GetbyBusiness (long Id)
     {
         using var connection = CreateConnection();
-        return await connection.QueryAsync<Business>("SELECT * FROM Business INNER JOIN product on Id = BusinessId WHERE Id=@Id;", new {Id = Id});
+        return await connection.QuerySingleAsync<Business>("SELECT * FROM Business WHERE Id=@Id;", new {Id = Id});
     }
+
+     public async Task<Business> GetbyProduct (long ProductId)
+    {
+        using var connection = CreateConnection();
+        return await connection.QuerySingleAsync<Business>("SELECT * FROM Product WHERE ProductId=@ProductId;", new {ProductId = ProductId});
+    }
+
 
 
 //UPDATE SQL for all of the below!
-     public async Task<Business> Update(Business Business)
+     public async Task<Business> UpdatebyBusiness(Business Business)
     {
         using var connection = CreateConnection();
-        return await connection.QuerySingleAsync<Business>("UPDATE Business INNER JOIN Product ON Id=BusinessId SET BusinessName = @BusinessName, PrimaryContact = @PrimaryContact, AddrBuildingName = @AddrBuildingName, AddrBuildingNumber = @AddrBuildingNumber, AddrStreet = @AddrStreet, AddrCity = @AddrCity, AddrCounty = @AddrCounty, AddrPostcode = @AddrPostcode, TelephoneNumber = @TelephoneNumber, TwitterHandle = @TwitterHandle, SocialmediaLink = @SocialmediaLink, BusinessImage = @BusinessImage, IsTrading = @IsTrading, ProductName = @ProductName  WHERE Id = @Id RETURNING *", Business);
+        return await connection.QuerySingleAsync<Business>("UPDATE Business SET BusinessName = @BusinessName, PrimaryContact = @PrimaryContact, AddrBuildingName = @AddrBuildingName, AddrBuildingNumber = @AddrBuildingNumber, AddrStreet = @AddrStreet, AddrCity = @AddrCity, AddrCounty = @AddrCounty, AddrPostcode = @AddrPostcode, TelephoneNumber = @TelephoneNumber, TwitterHandle = @TwitterHandle, SocialmediaLink = @SocialmediaLink, BusinessImage = @BusinessImage, IsTrading = @IsTrading WHERE Id = @Id RETURNING *", Business);
     }
 
-    public async Task<Business> Insert(Business Business)
+     public async Task<Business> UpdatebyProduct(Business Business)
+    {
+        using var connection = CreateConnection();
+        return await connection.QuerySingleAsync<Business>("UPDATE Product SET ProductName = @ProductName, ProductType = @ProductType WHERE ProductId = @ProductId RETURNING *", Business);
+    }
+
+    public async Task<Business> InsertbyBusiness(Business Business)
+    {
+        using var connection = CreateConnection();
+        return await connection.QuerySingleAsync<Business>("INSERT INTO Business (BusinessName, PrimaryContact, AddrBuildingName, AddrBuildingNumber, AddrStreet, AddrCity, AddrCounty, AddrPostcode,TelephoneNumber,TwitterHandle,SocialmediaLink,BusinessImage,IsTrading) VALUES (@BusinessName, @PrimaryContact, @AddrBuildingName, @AddrBuildingNumber, @AddrStreet, @AddrCity,@AddrCounty, @AddrPostcode, @TelephoneNumber, @TwitterHandle,@SocialmediaLink, @BusinessImage, @IsTrading) RETURNING *;", Business);
+    }
+
+
+    public async Task<Business> InsertbyProduct(Business Business)
     {
         using var connection = CreateConnection();
         return await connection.QuerySingleAsync<Business>("INSERT INTO Business (BusinessName, PrimaryContact, AddrBuildingName, AddrBuildingNumber, AddrStreet, AddrCity, AddrCounty, AddrPostcode,TelephoneNumber,TwitterHandle,SocialmediaLink,BusinessImage,IsTrading) VALUES (@BusinessName, @PrimaryContact, @AddrBuildingName, @AddrBuildingNumber, @AddrStreet, @AddrCity,@AddrCounty, @AddrPostcode, @TelephoneNumber, @TwitterHandle,@SocialmediaLink, @BusinessImage, @IsTrading) RETURNING *;", Business);
