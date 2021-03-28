@@ -125,5 +125,27 @@ namespace tests
             Assert.Equal(business.BusinessName, model.BusinessName);
             Assert.Equal(business.IsTrading, model.IsTrading);
         }
+
+        [Fact]
+        public void DeleteBusiness_CallsDeletebyBusinessMethodOnMockRepoWithCorrectId_ReturnsOkObject()
+        {
+            //Arrange
+            var id = 12;
+
+            mockRepo.Setup(repo => repo.DeletebyBusiness(id));
+
+            //Act
+            var result = controller.DeletebyBusiness(id);
+            var resultObj = result as OkObjectResult;
+            var model = resultObj.Value as String;
+
+            //Assert
+            mockRepo.Verify(repo => repo.DeletebyBusiness(id), Times.Once);
+
+            Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(200, resultObj.StatusCode);
+
+            Assert.Equal(model, $"Business at {id} is deleted");
+        }
     }
 }
