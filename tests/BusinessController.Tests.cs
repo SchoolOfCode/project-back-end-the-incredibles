@@ -102,6 +102,28 @@ namespace tests
 
             Assert.Equal(expectedId, model.Id);
         }
-        
+
+        [Fact]
+        public async void CreateBusiness_CallsInsertbyBusinessOnMockRepo_CreatedResultReturnedWithNewBusiness()
+        {
+            //Arrange
+            var business = new Business { BusinessName = "Loves2Test", IsTrading = true };
+
+            mockRepo.Setup(repo => repo.InsertbyBusiness(business)).Returns(Task.FromResult<Business>(business));
+
+            //Act
+            var result = await controller.InsertbyBusiness(business);
+            var resultObj = result as CreatedResult;
+            var model = resultObj.Value as Business;
+
+            //Assert
+            mockRepo.Verify(repo => repo.InsertbyBusiness(business), Times.Once);
+
+            Assert.IsType<CreatedResult>(result);
+            Assert.Equal(201, resultObj.StatusCode);
+
+            Assert.Equal(business.BusinessName, model.BusinessName);
+            Assert.Equal(business.IsTrading, model.IsTrading);
+        }
     }
 }
