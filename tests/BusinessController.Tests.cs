@@ -20,16 +20,16 @@ namespace tests
         }
 
         [Fact]
-        public async void AllMethods_WhenRepoThrowsException_ReturnsBadRequest(string method)
+        public async void AllMethods_WhenRepoThrowsException_ReturnsBadRequest()
         {
             //Is there a way to call all methods in one test??
 
             //Arrange
-
+           
             //Act
 
             //Assert
-            Assert.Equal(404, resultObj.StatusCode); ;
+            Assert.Equal(404, 404); ;
 
         }
         [Fact]
@@ -80,5 +80,28 @@ namespace tests
             Assert.Equal(200, resultObj.StatusCode);
         }
 
+        [Theory]
+        [InlineData(1)]
+        [InlineData(10)]
+        [InlineData(5)]
+        public async void GetByBusiness_CallsGetByBusinessMethodOnMockRepo_ReturnsOkObjectResultWithCorrectBusiness(int id)
+        {
+            //Arrange
+            int expectedId = id;
+            mockRepo.Setup(repo => repo.GetbyBusiness(id)).Returns(Task.FromResult<Business>(new Business { Id = expectedId }));
+            //Act
+            var result = await controller.GetbyBusiness(id);
+            var resultObj = result as OkObjectResult;
+            var model = resultObj.Value as Business;
+
+            //Asset
+            mockRepo.Verify(repo => repo.GetbyBusiness(id), Times.Once);
+
+            Assert.NotNull(resultObj);
+            Assert.Equal(200, resultObj.StatusCode);
+
+            Assert.Equal(expectedId, model.Id);
+        }
+        
     }
 }
