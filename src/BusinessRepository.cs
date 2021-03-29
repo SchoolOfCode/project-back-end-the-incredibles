@@ -50,21 +50,21 @@ public class BusinessRepository : BaseRepository, IRepository<Business>
      public async Task<Business> UpdatebyBusiness(Business Business)
     {
         using var connection = CreateConnection();
-        return await connection.QuerySingleAsync<Business>("UPDATE Business SET BusinessName = @BusinessName, PrimaryContact = @PrimaryContact, AddrBuildingName = @AddrBuildingName, AddrBuildingNumber = @AddrBuildingNumber, AddrStreet = @AddrStreet, AddrCity = @AddrCity, AddrCounty = @AddrCounty, AddrPostcode = @AddrPostcode, TelephoneNumber = @TelephoneNumber, TwitterHandle = @TwitterHandle, SocialmediaLink = @SocialmediaLink, BusinessImage = @BusinessImage, IsTrading = @IsTrading WHERE Id = @Id RETURNING *", Business);
+        return await connection.QuerySingleAsync<Business>("UPDATE Business SET BusinessName = @BusinessName, PrimaryEmail = @PrimaryEmail, AddrLocation = @AddrLocation, TelephoneNumber = @TelephoneNumber, BusinessLogo = @BusinessLogo, IsTrading = @IsTrading WHERE Id = @Id RETURNING *", Business);
     }
 
 
      public async Task<Business> UpdatebyProduct(Business Business)
     {
         using var connection = CreateConnection();
-        return await connection.QuerySingleAsync<Business>("UPDATE Product SET ProductName = @ProductName, ProductType = @ProductType, ProductDescription = @ProductDescription, ProductImage = @ProductImage, ProductPrice = @ProductPrice, UnitSize = @UnitSize, Quantity = @Quantity WHERE ProductId = @ProductId RETURNING *", Business);
+        return await connection.QuerySingleAsync<Business>("UPDATE Product SET ProductName = @ProductName, ProductDescription = @ProductDescription, ProductImage = @ProductImage, ProductPrice = @ProductPrice, Quantity = @Quantity WHERE ProductId = @ProductId RETURNING *", Business);
     }
 
 
     public async Task<Business> InsertbyBusiness(Business Business)
     {
         using var connection = CreateConnection();
-        return await connection.QuerySingleAsync<Business>("INSERT INTO Business (BusinessName, PrimaryContact, AddrBuildingName, AddrBuildingNumber, AddrStreet, AddrCity, AddrCounty, AddrPostcode,TelephoneNumber,TwitterHandle,SocialmediaLink,BusinessImage,IsTrading) VALUES (@BusinessName, @PrimaryContact, @AddrBuildingName, @AddrBuildingNumber, @AddrStreet, @AddrCity,@AddrCounty, @AddrPostcode, @TelephoneNumber, @TwitterHandle,@SocialmediaLink, @BusinessImage, @IsTrading) RETURNING *;", Business);
+        return await connection.QuerySingleAsync<Business>("INSERT INTO Business (BusinessName, PrimaryEmail, AddrLocation, TelephoneNumber, BusinessLogo,IsTrading) VALUES (@BusinessName, @PrimaryEmail, @AddrLocation, @TelephoneNumber, @BusinessLogo, @IsTrading) RETURNING *;", Business);
     }
 
 
@@ -72,7 +72,7 @@ public class BusinessRepository : BaseRepository, IRepository<Business>
     public async Task<Business> InsertbyProduct(Business Business)
     {
         using var connection = CreateConnection();
-        return await connection.QuerySingleAsync<Business>("INSERT INTO Product (BusinessId, ProductName, ProductType, ProductDescription, ProductImage, ProductPrice, UnitSize, Quantity) VALUES (@BusinessId, @ProductName, @ProductType, @ProductDescription, @ProductImage, @ProductPrice, @UnitSize, @Quantity) RETURNING *;", Business);
+        return await connection.QuerySingleAsync<Business>("INSERT INTO Product (BusinessId, ProductName, ProductType, ProductDescription, ProductImage, ProductPrice, Quantity) VALUES (@BusinessId, @ProductName, @ProductDescription, @ProductImage, @ProductPrice, @Quantity) RETURNING *;", Business);
     }
 
 

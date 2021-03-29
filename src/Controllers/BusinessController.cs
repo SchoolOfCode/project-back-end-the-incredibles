@@ -81,7 +81,7 @@ public class BusinessController : ControllerBase
     public async Task<IActionResult> UpdatebyBusiness(long id, [FromBody] Business business)
     {
         try{
-            var updatedBusiness = await _businessRepository.UpdatebyBusiness(new Business {Id = id, BusinessName = business.BusinessName, PrimaryContact = business.PrimaryContact, AddrBuildingNumber = business.AddrBuildingNumber, AddrBuildingName = business.AddrBuildingName, AddrStreet = business.AddrStreet, AddrCity = business.AddrCity, AddrCounty = business.AddrCounty, AddrPostcode = business.AddrPostcode, TelephoneNumber = business.TelephoneNumber, TwitterHandle = business.TwitterHandle, SocialmediaLink = business.SocialmediaLink, BusinessImage = business.BusinessImage, IsTrading = business.IsTrading});
+            var updatedBusiness = await _businessRepository.UpdatebyBusiness(new Business {Id = id, BusinessName = business.BusinessName, PrimaryEmail = business.PrimaryEmail, TelephoneNumber = business.TelephoneNumber, BusinessLogo = business.BusinessLogo, IsTrading = business.IsTrading});
             return Ok(updatedBusiness);
         }
         catch(Exception){
@@ -96,7 +96,7 @@ public class BusinessController : ControllerBase
     public async Task<IActionResult> UpdatebyProduct(int ProductId, [FromBody] Business business)
     {
         try{
-            var updatedBusiness = await _businessRepository.UpdatebyProduct(new Business { ProductId =ProductId, ProductName = business.ProductName, ProductType = business.ProductType, ProductDescription = business.ProductDescription, ProductImage = business.ProductImage, ProductPrice = business.ProductPrice, UnitSize = business.UnitSize, Quantity= business.Quantity});
+            var updatedBusiness = await _businessRepository.UpdatebyProduct(new Business { ProductId =ProductId, ProductName = business.ProductName, ProductDescription = business.ProductDescription, ProductImage = business.ProductImage, ProductPrice = business.ProductPrice, Quantity= business.Quantity});
             return Ok(updatedBusiness);
         }
         catch(Exception){
