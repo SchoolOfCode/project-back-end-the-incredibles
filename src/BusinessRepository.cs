@@ -2,9 +2,27 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Dapper;
 using System.Threading.Tasks;
+using System;
 
 public class BusinessRepository : BaseRepository, IRepository<Business>
 {
+    //gets business by Auth0Id
+    public async Task<Business> GetbyBusiness (string Auth)
+    {
+        using var connection = CreateConnection();
+        var business = await connection.QuerySingleAsync<Business>("SELECT * FROM Business WHERE auth0Id=@Auth;", new {Auth = Auth});
+
+        return business;
+    }
+    //Gets List of Products from BusinessID
+    public async Task<IEnumerable<Product>> GetProducts(long Id)
+    {
+        using var connection = CreateConnection();
+        
+        return await connection.QueryAsync<Product>("SELECT * FROM Product WHERE businessID=@Id", new { Id = Id });
+    }
+
+
     public BusinessRepository(IConfiguration configuration) : base(configuration){}
 
 
@@ -31,15 +49,9 @@ public class BusinessRepository : BaseRepository, IRepository<Business>
 
 
 
-    public async Task<Business> GetbyBusiness (long Id)
-    {
-        using var connection = CreateConnection();
-        return await connection.QuerySingleAsync<Business>("SELECT * FROM Business WHERE Id=@Id;", new {Id = Id});
-    }
 
 
-
-     public async Task<Business> GetbyProduct (long ProductId)
+    public async Task<Business> GetbyProduct (long ProductId)
     {
         using var connection = CreateConnection();
         return await connection.QuerySingleAsync<Business>("SELECT * FROM Product WHERE ProductId=@ProductId;", new {ProductId = ProductId});

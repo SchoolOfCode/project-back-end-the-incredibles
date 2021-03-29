@@ -47,15 +47,22 @@ public class BusinessController : ControllerBase
 
     
     [HttpGet]
-    [Route("[action]/{Id}")]
-    public async Task<IActionResult> GetbyBusiness(long Id)
+    [Route("/{Auth}")]
+    public async Task<IActionResult> GetbyBusiness(string Auth)
     {
         try{
-        var returnedBusiness = await _businessRepository.GetbyBusiness(Id);
-        return Ok(returnedBusiness);
+        var returnedBusiness = await _businessRepository.GetbyBusiness(Auth);
+
+            long id = returnedBusiness.Id;
+            returnedBusiness.Products = await _businessRepository.GetProducts(id);
+
+
+            
+            return Ok(returnedBusiness);
         }
-        catch (Exception){
-        return BadRequest("Id not found");
+        catch (Exception error){
+            Console.WriteLine(error);
+            return BadRequest("cannot fulfil");
         }
     }
 
@@ -91,18 +98,18 @@ public class BusinessController : ControllerBase
 
 
 
-    [HttpPut]
-    [Route("[action]/{ProductId}")]
-    public async Task<IActionResult> UpdatebyProduct(int ProductId, [FromBody] Business business)
-    {
-        try{
-            var updatedBusiness = await _businessRepository.UpdatebyProduct(new Business { ProductId =ProductId, ProductName = business.ProductName, ProductDescription = business.ProductDescription, ProductImage = business.ProductImage, ProductPrice = business.ProductPrice, Quantity= business.Quantity});
-            return Ok(updatedBusiness);
-        }
-        catch(Exception){
-            return BadRequest("Id not found");
-        }
-    }
+    // [HttpPut]
+    // [Route("[action]/{ProductId}")]
+    // public async Task<IActionResult> UpdatebyProduct(int ProductId, [FromBody] Business business)
+    // {
+    //     try{
+    //         // var updatedBusiness = await _businessRepository.UpdatebyProduct(new Business { ProductId =ProductId, ProductName = business.ProductName, ProductDescription = business.ProductDescription, ProductImage = business.ProductImage, ProductPrice = business.ProductPrice, Quantity= business.Quantity});
+    //         //return Ok(updatedBusiness);
+    //     }
+    //     catch(Exception){
+    //         return BadRequest("Id not found");
+    //     }
+    // }
     
 
 
