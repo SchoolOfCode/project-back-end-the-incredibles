@@ -9,4 +9,4 @@
 
 
 ### notes:
-- will we need to make business model have a product felid that is just a list of products?
+- will we need to make business model have a product felid that is just a list of products? 
