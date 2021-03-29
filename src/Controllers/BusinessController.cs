@@ -81,7 +81,7 @@ public class BusinessController : ControllerBase
     public async Task<IActionResult> UpdatebyBusiness(long id, [FromBody] Business business)
     {
         try{
-            var updatedBusiness = await _businessRepository.UpdatebyBusiness(new Business {Id = id, BusinessName = business.BusinessName, PrimaryEmail = business.PrimaryEmail, TelephoneNumber = business.TelephoneNumber, BusinessLogo = business.BusinessLogo, IsTrading = business.IsTrading});
+            var updatedBusiness = await _businessRepository.UpdatebyBusiness(new Business {Id = id, BusinessName = business.BusinessName, PrimaryEmail = business.PrimaryEmail, AddrLocation = business.AddrLocation, TelephoneNumber = business.TelephoneNumber, BusinessLogo = business.BusinessLogo, IsTrading = business.IsTrading});
             return Ok(updatedBusiness);
         }
         catch(Exception){
