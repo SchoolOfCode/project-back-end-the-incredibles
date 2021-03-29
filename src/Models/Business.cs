@@ -12,7 +12,7 @@ public class Business
 
     public string PrimaryEmail { get; set; }
 
-    public string AddrLoaction { get; set; }
+    public string AddrLocation { get; set; }
 
     public int TelephoneNumber { get; set; }
 
