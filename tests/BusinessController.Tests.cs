@@ -25,7 +25,7 @@ namespace tests
             //Is there a way to call all methods in one test??
 
             //Arrange
-           
+
             //Act
 
             //Assert
