@@ -14,6 +14,14 @@ public class BusinessRepository : BaseRepository, IRepository<Business>
 
         return business;
     }
+    public async Task<Business> GetbyBusinessName(string Name)
+    {
+        string businessName = Name.Replace("-", " ");
+        using var connection = CreateConnection();
+        var business = await connection.QuerySingleAsync<Business>("SELECT * FROM Business WHERE businessName ILIKE @businessName;", new { businessName = businessName });
+
+        return business;
+    }
     //Gets List of Products from BusinessID
     public async Task<IEnumerable<Product>> GetProducts(long Id)
     {
