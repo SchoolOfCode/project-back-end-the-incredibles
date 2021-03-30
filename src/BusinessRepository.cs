@@ -51,10 +51,10 @@ public class BusinessRepository : BaseRepository, IRepository<Business>
 
 
 
-    public async Task<Business> GetbyProduct (long ProductId)
+    public async Task<Product> GetbyProduct (long ProductId)
     {
         using var connection = CreateConnection();
-        return await connection.QuerySingleAsync<Business>("SELECT * FROM Product WHERE ProductId=@ProductId;", new {ProductId = ProductId});
+        return await connection.QuerySingleAsync<Product>("SELECT * FROM Product WHERE ProductId=@ProductId;", new {ProductId = ProductId});
     }
 
 
@@ -81,10 +81,10 @@ public class BusinessRepository : BaseRepository, IRepository<Business>
 
 
 
-    public async Task<Business> InsertbyProduct(Business Business)
+    public async Task<Product> InsertbyProduct(Product product)
     {
         using var connection = CreateConnection();
-        return await connection.QuerySingleAsync<Business>("INSERT INTO Product (BusinessId, ProductName, ProductType, ProductDescription, ProductImage, ProductPrice, Quantity) VALUES (@BusinessId, @ProductName, @ProductDescription, @ProductImage, @ProductPrice, @Quantity) RETURNING *;", Business);
+        return await connection.QuerySingleAsync<Product>("INSERT INTO Product (BusinessId, ProductName, ProductType, ProductDescription, ProductImage, ProductPrice, Quantity) VALUES (@BusinessId, @ProductName, @ProductDescription, @ProductImage, @ProductPrice, @Quantity) RETURNING *;", product);
     }
 
 

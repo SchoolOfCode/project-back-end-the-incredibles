@@ -6,11 +6,11 @@ public interface IRepository<T>
 
     void DeletebyBusiness(long ProductId);
     void DeletebyProduct(long ProductId);
-    Task<T> GetbyProduct(long ProductId);
+    Task<Product> GetbyProduct(long ProductId);
     Task<T> UpdatebyBusiness(T t);
-    Task<T> UpdatebyProduct(T t);
+    Task<Business> UpdatebyProduct(T t);
     Task<T> InsertbyBusiness(T t);
-    Task<T> InsertbyProduct(T t);
+    Task<Product> InsertbyProduct(Product product);
     Task<T> GetbyBusiness(string Auth);
 
     Task<IEnumerable<Product>> GetProducts(long id);
