@@ -12,6 +12,7 @@ public interface IRepository<T>
     Task<T> InsertbyBusiness(T t);
     Task<Product> InsertbyProduct(Product product);
     Task<T> GetbyBusiness(string Auth);
+    Task<T> GetbyBusinessName(string Name);
 
     Task<IEnumerable<Product>> GetProducts(long id);
 

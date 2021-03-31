@@ -66,6 +66,27 @@ public class BusinessController : ControllerBase
         }
     }
 
+    [HttpGet]
+    [Route("/store/{name}")]
+    public async Task<IActionResult> GetbyBusinessName(string name)
+    {
+        try
+        {
+
+            var returnedBusiness = await _businessRepository.GetbyBusinessName(name);
+
+            long id = returnedBusiness.Id;
+            returnedBusiness.Products = await _businessRepository.GetProducts(id);
+
+            return Ok(returnedBusiness);
+        }
+        catch (Exception error)
+        {
+            Console.WriteLine(error);
+            return BadRequest("cannot fulfil");
+        }
+    }
+
 
 
     [HttpGet]
@@ -128,7 +149,7 @@ public class BusinessController : ControllerBase
         }
         catch (Exception)
         {
-            return BadRequest("Business entered is not valid");
+            return BadRequest("Business entered is not valid sorry");
         }
     }
 
