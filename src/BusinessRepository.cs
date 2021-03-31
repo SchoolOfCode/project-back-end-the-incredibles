@@ -7,10 +7,10 @@ using System;
 public class BusinessRepository : BaseRepository, IRepository<Business>
 {
     //gets business by Auth0Id
-    public async Task<Business> GetbyBusiness (string Auth)
+    public async Task<Business> GetbyBusiness(string Auth)
     {
         using var connection = CreateConnection();
-        var business = await connection.QuerySingleAsync<Business>("SELECT * FROM Business WHERE auth0Id=@Auth;", new {Auth = Auth});
+        var business = await connection.QuerySingleAsync<Business>("SELECT * FROM Business WHERE auth0Id=@Auth;", new { Auth = Auth });
 
         return business;
     }
@@ -26,25 +26,26 @@ public class BusinessRepository : BaseRepository, IRepository<Business>
     public async Task<IEnumerable<Product>> GetProducts(long Id)
     {
         using var connection = CreateConnection();
-        
+
         return await connection.QueryAsync<Product>("SELECT * FROM Product WHERE businessID=@Id", new { Id = Id });
     }
 
 
-    public BusinessRepository(IConfiguration configuration) : base(configuration){}
+    public BusinessRepository(IConfiguration configuration) : base(configuration) { }
 
 
     public async Task<IEnumerable<Business>> GetAll()
     {
         using var connection = CreateConnection();
-        return await connection.QueryAsync<Business>("SELECT * FROM Business LEFT JOIN Product ON id = BusinessId;"); 
+        // return await connection.QueryAsync<Business>("SELECT * FROM Business LEFT JOIN Product ON id = BusinessId;"); 
+        return await connection.QueryAsync<Business>("SELECT * FROM Business;");
     }
 
 
     public void DeletebyBusiness(long Id)
     {
         using var connection = CreateConnection();
-        connection.Execute("DELETE FROM Business WHERE Id=@Id;", new {Id = Id});
+        connection.Execute("DELETE FROM Business WHERE Id=@Id;", new { Id = Id });
     }
 
 
@@ -52,30 +53,31 @@ public class BusinessRepository : BaseRepository, IRepository<Business>
     public void DeletebyProduct(long ProductId)
     {
         using var connection = CreateConnection();
-        connection.Execute("DELETE FROM Product WHERE ProductId=@ProductId;", new {ProductId = ProductId});
+        connection.Execute("DELETE FROM Product WHERE ProductId=@ProductId;", new { ProductId = ProductId });
     }
 
 
 
 
 
-    public async Task<Product> GetbyProduct (long ProductId)
+    public async Task<Product> GetbyProduct(long ProductId)
     {
         using var connection = CreateConnection();
-        return await connection.QuerySingleAsync<Product>("SELECT * FROM Product WHERE ProductId=@ProductId;", new {ProductId = ProductId});
+        return await connection.QuerySingleAsync<Product>("SELECT * FROM Product WHERE ProductId=@ProductId;", new { ProductId = ProductId });
     }
 
 
 
-     public async Task<Business> UpdatebyBusiness(Business Business)
+    public async Task<Business> UpdatebyBusiness(Business Business)
     {
         using var connection = CreateConnection();
         return await connection.QuerySingleAsync<Business>("UPDATE Business SET BusinessName = @BusinessName, PrimaryEmail = @PrimaryEmail, AddrLocation = @AddrLocation, TelephoneNumber = @TelephoneNumber, BusinessLogo = @BusinessLogo, IsTrading = @IsTrading WHERE Id = @Id RETURNING *", Business);
     }
 
 
-     public async Task<Product> UpdatebyProduct(Product product)
-    {   Console.WriteLine(product.ProductId);
+    public async Task<Product> UpdatebyProduct(Product product)
+    {
+        Console.WriteLine(product.ProductId);
         using var connection = CreateConnection();
         return await connection.QuerySingleAsync<Product>("UPDATE Product SET BusinessID = @BusinessId, ProductId = @ProductId, ProductName = @ProductName, ProductImage = @ProductImage, ProductPrice = @ProductPrice, Quantity = @Quantity WHERE ProductId = @ProductId RETURNING *", product);
     }
