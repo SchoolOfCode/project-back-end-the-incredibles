@@ -149,7 +149,7 @@ public class BusinessController : ControllerBase
         }
         catch (Exception)
         {
-            return BadRequest("Business entered is not valid");
+            return BadRequest("Business entered is not valid sorry");
         }
     }
 
