@@ -74,10 +74,10 @@ public class BusinessRepository : BaseRepository, IRepository<Business>
     }
 
 
-     public async Task<Business> UpdatebyProduct(Business Business)
-    {
+     public async Task<Product> UpdatebyProduct(Product product)
+    {   Console.WriteLine(product.ProductId);
         using var connection = CreateConnection();
-        return await connection.QuerySingleAsync<Business>("UPDATE Product SET ProductName = @ProductName, ProductDescription = @ProductDescription, ProductImage = @ProductImage, ProductPrice = @ProductPrice, Quantity = @Quantity WHERE ProductId = @ProductId RETURNING *", Business);
+        return await connection.QuerySingleAsync<Product>("UPDATE Product SET BusinessID = @BusinessId, ProductId = @ProductId, ProductName = @ProductName, ProductImage = @ProductImage, ProductPrice = @ProductPrice, Quantity = @Quantity WHERE ProductId = @ProductId RETURNING *", product);
     }
 
 

@@ -8,7 +8,7 @@ public interface IRepository<T>
     void DeletebyProduct(long ProductId);
     Task<Product> GetbyProduct(long ProductId);
     Task<T> UpdatebyBusiness(T t);
-    Task<Business> UpdatebyProduct(T t);
+    Task<Product> UpdatebyProduct(Product product);
     Task<T> InsertbyBusiness(T t);
     Task<Product> InsertbyProduct(Product product);
     Task<T> GetbyBusiness(string Auth);

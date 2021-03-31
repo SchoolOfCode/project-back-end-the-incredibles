@@ -123,18 +123,18 @@ public class BusinessController : ControllerBase
 
 
 
-    // [HttpPut]
-    // [Route("[action]/{ProductId}")]
-    // public async Task<IActionResult> UpdatebyProduct(int ProductId, [FromBody] Business business)
-    // {
-    //     try{
-    //         // var updatedBusiness = await _businessRepository.UpdatebyProduct(new Business { ProductId =ProductId, ProductName = business.ProductName, ProductDescription = business.ProductDescription, ProductImage = business.ProductImage, ProductPrice = business.ProductPrice, Quantity= business.Quantity});
-    //         //return Ok(updatedBusiness);
-    //     }
-    //     catch(Exception){
-    //         return BadRequest("Id not found");
-    //     }
-    // }
+    [HttpPut]
+    [Route("[action]/{Id}")]
+    public async Task<IActionResult> UpdatebyProduct(int Id, [FromBody] Product product)
+    {
+        try{
+            var updatedBusiness = await _businessRepository.UpdatebyProduct(new Product {BusinessId = product.BusinessId, ProductId = Id, ProductName = product.ProductName, ProductImage = product.ProductImage, ProductPrice = product.ProductPrice, Quantity= product.Quantity});
+            return Ok(updatedBusiness);
+        }
+        catch(Exception){
+            return BadRequest("Id not found");
+        }
+    }
 
 
 
