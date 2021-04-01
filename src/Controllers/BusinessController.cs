@@ -43,19 +43,47 @@ public class BusinessController : ControllerBase
             return NotFound("There are no businesses.");
         }
     }
-   
 
-    
+
+
     [HttpGet]
-    [Route("[action]/{Id}")]
-    public async Task<IActionResult> GetbyBusiness(long Id)
+    [Route("/{Auth}")]
+    public async Task<IActionResult> GetbyBusiness(string Auth)
     {
-        try{
-        var returnedBusiness = await _businessRepository.GetbyBusiness(Id);
-        return Ok(returnedBusiness);
+        try
+        {
+            var returnedBusiness = await _businessRepository.GetbyBusiness(Auth);
+
+            long id = returnedBusiness.Id;
+            returnedBusiness.Products = await _businessRepository.GetProducts(id);
+
+            return Ok(returnedBusiness);
         }
-        catch (Exception){
-        return BadRequest("Id not found");
+        catch (Exception error)
+        {
+            Console.WriteLine(error);
+            return BadRequest("cannot fulfil");
+        }
+    }
+
+    [HttpGet]
+    [Route("/store/{name}")]
+    public async Task<IActionResult> GetbyBusinessName(string name)
+    {
+        try
+        {
+
+            var returnedBusiness = await _businessRepository.GetbyBusinessName(name);
+
+            long id = returnedBusiness.Id;
+            returnedBusiness.Products = await _businessRepository.GetProducts(id);
+
+            return Ok(returnedBusiness);
+        }
+        catch (Exception error)
+        {
+            Console.WriteLine(error);
+            return BadRequest("cannot fulfil");
         }
     }
 
@@ -65,26 +93,30 @@ public class BusinessController : ControllerBase
     [Route("[action]/{Id}")]
     public async Task<IActionResult> GetbyProduct(long Id)
     {
-        try{
-        var returnedBusiness = await _businessRepository.GetbyProduct(Id);
-        return Ok(returnedBusiness);
+        try
+        {
+            var returnedBusiness = await _businessRepository.GetbyProduct(Id);
+            return Ok(returnedBusiness);
         }
-        catch (Exception){
-        return BadRequest("Id not found");
+        catch (Exception)
+        {
+            return BadRequest("Id not found");
         }
     }
 
 
-    
+
     [HttpPut]
     [Route("[action]/{Id}")]
     public async Task<IActionResult> UpdatebyBusiness(long id, [FromBody] Business business)
     {
-        try{
-            var updatedBusiness = await _businessRepository.UpdatebyBusiness(new Business {Id = id, BusinessName = business.BusinessName, PrimaryContact = business.PrimaryContact, AddrBuildingNumber = business.AddrBuildingNumber, AddrBuildingName = business.AddrBuildingName, AddrStreet = business.AddrStreet, AddrCity = business.AddrCity, AddrCounty = business.AddrCounty, AddrPostcode = business.AddrPostcode, TelephoneNumber = business.TelephoneNumber, TwitterHandle = business.TwitterHandle, SocialmediaLink = business.SocialmediaLink, BusinessImage = business.BusinessImage, IsTrading = business.IsTrading});
+        try
+        {
+            var updatedBusiness = await _businessRepository.UpdatebyBusiness(new Business { Id = id, BusinessName = business.BusinessName, PrimaryEmail = business.PrimaryEmail, AddrLocation = business.AddrLocation, TelephoneNumber = business.TelephoneNumber, BusinessLogo = business.BusinessLogo, IsTrading = business.IsTrading });
             return Ok(updatedBusiness);
         }
-        catch(Exception){
+        catch (Exception)
+        {
             return BadRequest("Id not found");
         }
     }
@@ -92,32 +124,39 @@ public class BusinessController : ControllerBase
 
 
     [HttpPut]
-    [Route("[action]/{ProductId}")]
-    public async Task<IActionResult> UpdatebyProduct(int ProductId, [FromBody] Business business)
+    [Route("[action]/{Id}")]
+    public async Task<IActionResult> UpdatebyProduct(int Id, [FromBody] Product product)
     {
         try{
-            var updatedBusiness = await _businessRepository.UpdatebyProduct(new Business { ProductId =ProductId, ProductName = business.ProductName, ProductType = business.ProductType, ProductDescription = business.ProductDescription, ProductImage = business.ProductImage, ProductPrice = business.ProductPrice, UnitSize = business.UnitSize, Quantity= business.Quantity});
+            var updatedBusiness = await _businessRepository.UpdatebyProduct(new Product {BusinessId = product.BusinessId, ProductId = Id, ProductName = product.ProductName, ProductImage = product.ProductImage, ProductPrice = product.ProductPrice, Quantity= product.Quantity});
             return Ok(updatedBusiness);
         }
         catch(Exception){
             return BadRequest("Id not found");
         }
     }
-    
+
 
 
     [HttpPost]
     [Route("[action]")]
     public async Task<IActionResult> InsertbyBusiness([FromBody] Business business)
     {
-        try 
+        try
         {
             var insertedBusiness = await _businessRepository.InsertbyBusiness(business);
+            //override nulls
+            insertedBusiness.BusinessName = "Please enter your business name";
+            insertedBusiness.PrimaryEmail = "Please enter your primary email address.";
+            insertedBusiness.AddrLocation = "Please enter your location";
+            insertedBusiness.BusinessLogo = "";
+            insertedBusiness.Products = new List<Product> { };
+
             return Created($"/businesses/{insertedBusiness.Id}", insertedBusiness);
         }
-        catch(Exception)
+        catch (Exception)
         {
-            return BadRequest("Business entered is not valid");
+            return BadRequest("Business entered is not valid sorry");
         }
     }
 
@@ -125,14 +164,14 @@ public class BusinessController : ControllerBase
 
     [HttpPost]
     [Route("[action]")]
-    public async Task<IActionResult> InsertbyProduct([FromBody] Business business)
+    public async Task<IActionResult> InsertbyProduct([FromBody] Product product)
     {
-        try 
+        try
         {
-            var insertedBusiness = await _businessRepository.InsertbyProduct(business);
-            return Created($"/businesses/{insertedBusiness.Id}", insertedBusiness);
+            var insertedProduct = await _businessRepository.InsertbyProduct(product);
+            return Created($"/product/{insertedProduct.ProductId}", insertedProduct);
         }
-        catch(Exception)
+        catch (Exception)
         {
             return BadRequest("Business entered is not valid");
         }
@@ -149,7 +188,7 @@ public class BusinessController : ControllerBase
             _businessRepository.DeletebyBusiness(Id);
             return Ok($"Business at {Id} is deleted");
         }
-        catch(Exception)
+        catch (Exception)
         {
             return BadRequest("Id is not valid");
         }
@@ -166,7 +205,7 @@ public class BusinessController : ControllerBase
             _businessRepository.DeletebyProduct(ProductId);
             return Ok($"Product at {ProductId} is deleted");
         }
-        catch(Exception)
+        catch (Exception)
         {
             return BadRequest("Id is not valid");
         }
