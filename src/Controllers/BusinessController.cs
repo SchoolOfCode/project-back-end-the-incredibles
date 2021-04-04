@@ -59,9 +59,8 @@ public class BusinessController : ControllerBase
 
             return Ok(returnedBusiness);
         }
-        catch (Exception error)
+        catch (Exception)
         {
-            Console.WriteLine(error);
             return BadRequest("cannot fulfil");
         }
     }
