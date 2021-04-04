@@ -70,6 +70,5 @@ namespace tests
             //Assert
             Assert.IsType<BadRequestObjectResult>(result);
         }
-
     }
 }
