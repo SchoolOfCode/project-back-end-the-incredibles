@@ -67,7 +67,7 @@ public class BusinessController : ControllerBase
     }
 
     [HttpGet]
-    [Route("/store/{name}")]
+    [Route("/shop/{name}")]
     public async Task<IActionResult> GetbyBusinessName(string name)
     {
         try
@@ -127,11 +127,13 @@ public class BusinessController : ControllerBase
     [Route("[action]/{Id}")]
     public async Task<IActionResult> UpdatebyProduct(int Id, [FromBody] Product product)
     {
-        try{
-            var updatedBusiness = await _businessRepository.UpdatebyProduct(new Product {BusinessId = product.BusinessId, ProductId = Id, ProductName = product.ProductName, ProductImage = product.ProductImage, ProductPrice = product.ProductPrice, Quantity= product.Quantity});
+        try
+        {
+            var updatedBusiness = await _businessRepository.UpdatebyProduct(new Product { BusinessId = product.BusinessId, ProductId = Id, ProductName = product.ProductName, ProductImage = product.ProductImage, ProductPrice = product.ProductPrice, Quantity = product.Quantity });
             return Ok(updatedBusiness);
         }
-        catch(Exception){
+        catch (Exception)
+        {
             return BadRequest("Id not found");
         }
     }
