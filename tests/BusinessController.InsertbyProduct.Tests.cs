@@ -18,119 +18,57 @@ namespace tests
             mockRepo = new Mock<IRepository<Business>>();
             controller = new BusinessController(mockRepo.Object);
         }
-
         [Fact]
-        public async void GetbyBusiness_CallsGetbyBusinessOnMockRepo_ReturnsOkObjectResult()
+        public async void InsertbyProduct_CallsInsertbyProductOnMockRepo_ReturnsCreatedObjectResult()
         {
             //Arrange
-            string authId = "Auth1234";
+            var expectedProduct = new Product() { };
 
-            mockRepo.Setup(repo => repo.GetbyBusiness(authId)).Returns(Task.FromResult<Business>(new Business {Auth0Id = authId}));
-            
+            mockRepo.Setup(repo => repo.InsertbyProduct(expectedProduct)).Returns(Task.FromResult<Product>(new Product { }));
+
             //Act
-            var result = await controller.GetbyBusiness(authId);
-            var resultObj = result as OkObjectResult;
+            var result = await controller.InsertbyProduct(expectedProduct);
+            var resultObj = result as CreatedResult;
 
             //Asset
-            mockRepo.Verify(repo => repo.GetbyBusiness(authId), Times.Once);
+            mockRepo.Verify(repo => repo.InsertbyProduct(expectedProduct), Times.Once);
 
             Assert.NotNull(resultObj);
-            Assert.Equal(200, resultObj.StatusCode);
+            Assert.Equal(201, resultObj.StatusCode);
         }
 
         [Fact]
-        public async void GetbyBusiness_WhenRepoThrowsException_ReturnsBadRequest()
+        public async void InsertbyProduct_ReturnsCreatedObjectResultForNewProductWithCorrectValues()
         {
             //Arrange
-            string authId = "auth1234";
+            var expectedProduct = new Product() { ProductName = "new product", ProductPrice= 4.56m};
 
-            mockRepo.Setup(repo => repo.GetbyBusiness(authId)).Throws(new Exception());
+            mockRepo.Setup(repo => repo.InsertbyProduct(expectedProduct)).Returns(Task.FromResult<Product>(expectedProduct));
 
             //Act
-            var result = await controller.GetbyBusiness(authId);
+            var result = await controller.InsertbyProduct(expectedProduct);
+            var resultObj = result as CreatedResult;
+            var newProduct = resultObj.Value as Product;
+
+            //Asset
+            Assert.NotNull(newProduct);
+            Assert.Equal(expectedProduct.ProductName, newProduct.ProductName);
+            Assert.Equal(expectedProduct.ProductPrice, newProduct.ProductPrice);
+        }
+
+        [Fact]
+        public async void InsertbyProduct_WhenRepoThrowsException_ReturnsBadRequest()
+        {
+            //Arrange
+            var newProduct = new Product() { };
+
+            mockRepo.Setup(repo => repo.InsertbyProduct(newProduct)).Throws(new Exception());
+
+            //Act
+            var result = await controller.InsertbyProduct(newProduct);
 
             //Assert
             Assert.IsType<BadRequestObjectResult>(result);
-        }
-
-        [Fact]
-        public async void GetAll_WhenSearchIsNullAndRepoThrowsException_ReturnsNotFound()
-        {
-            //Arrange
-            mockRepo.Setup(repo => repo.GetAll()).Throws(new InvalidOperationException());
-
-            //Act
-            var result = await controller.GetAll();
-            var resultObj = result as NotFoundObjectResult;
-
-            //Assert
-            Assert.Equal(404, resultObj.StatusCode); 
-        }
-
-        [Theory]
-        [InlineData("")]
-        [InlineData(" ")]
-        [InlineData("Dave")]
-        public async void GetAll_CallsSearchMethodOnMockRepoWhenSearchIsNotNull_ReturnsOkObject(string search)
-        {
-            //Arrange
-            mockRepo.Setup(repo => repo.Search(search));
-
-            //Act
-            var result = await controller.GetAll(search);
-            var resultObj = result as OkObjectResult;
-
-            //Asset
-            mockRepo.Verify(repo => repo.Search(search), Times.Once);
-
-            Assert.NotNull(resultObj);
-            Assert.Equal(200, resultObj.StatusCode);
-        }
-
-        [Theory]
-        [InlineData(1)]
-        [InlineData(10)]
-        [InlineData(5)]
-        public async void GetByBusiness_CallsGetByBusinessMethodOnMockRepo_ReturnsOkObjectResultWithCorrectBusiness(int id)
-        {
-            // //Arrange
-            // int expectedId = id;
-            // mockRepo.Setup(repo => repo.GetbyBusiness(id)).Returns(Task.FromResult<Business>(new Business { Id = expectedId }));
-            // //Act
-            // var result = await controller.GetbyBusiness(id);
-            // var resultObj = result as OkObjectResult;
-            // var model = resultObj.Value as Business;
-
-            // //Asset
-            // mockRepo.Verify(repo => repo.GetbyBusiness(id), Times.Once);
-
-            // Assert.NotNull(resultObj);
-            // Assert.Equal(200, resultObj.StatusCode);
-
-            // Assert.Equal(expectedId, model.Id);
-        }
-
-        [Fact]
-        public async void CreateBusiness_CallsInsertbyBusinessOnMockRepo_CreatedResultReturnedWithNewBusiness()
-        {
-            //Arrange
-            var business = new Business { BusinessName = "Loves2Test", IsTrading = true };
-
-            mockRepo.Setup(repo => repo.InsertbyBusiness(business)).Returns(Task.FromResult<Business>(business));
-
-            //Act
-            var result = await controller.InsertbyBusiness(business);
-            var resultObj = result as CreatedResult;
-            var model = resultObj.Value as Business;
-
-            //Assert
-            mockRepo.Verify(repo => repo.InsertbyBusiness(business), Times.Once);
-
-            Assert.IsType<CreatedResult>(result);
-            Assert.Equal(201, resultObj.StatusCode);
-
-            Assert.Equal(business.BusinessName, model.BusinessName);
-            Assert.Equal(business.IsTrading, model.IsTrading);
         }
 
     }
