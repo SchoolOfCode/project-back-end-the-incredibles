@@ -145,12 +145,12 @@ public class BusinessController : ControllerBase
     {
         try
         {
+            business.BusinessName = "Please enter your business name";
+            business.PrimaryEmail = "Please enter your primary email address.";
+            business.AddrLocation = "Please enter your location";
+            business.BusinessLogo = "";
             var insertedBusiness = await _businessRepository.InsertbyBusiness(business);
             //override nulls
-            insertedBusiness.BusinessName = "Please enter your business name";
-            insertedBusiness.PrimaryEmail = "Please enter your primary email address.";
-            insertedBusiness.AddrLocation = "Please enter your location";
-            insertedBusiness.BusinessLogo = "";
             insertedBusiness.Products = new List<Product> { };
 
             return Created($"/businesses/{insertedBusiness.Id}", insertedBusiness);
