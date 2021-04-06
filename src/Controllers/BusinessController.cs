@@ -145,9 +145,9 @@ public class BusinessController : ControllerBase
     {
         try
         {
-            business.BusinessName = "Please enter your business name";
-            business.PrimaryEmail = "Please enter your primary email address.";
-            business.AddrLocation = "Please enter your location";
+            business.BusinessName = "Please enter";
+            business.PrimaryEmail = "Please enter";
+            business.AddrLocation = "Please enter";
             business.BusinessLogo = "";
             var insertedBusiness = await _businessRepository.InsertbyBusiness(business);
             //override nulls
@@ -155,8 +155,9 @@ public class BusinessController : ControllerBase
 
             return Created($"/businesses/{insertedBusiness.Id}", insertedBusiness);
         }
-        catch (Exception)
+        catch (Exception error)
         {
+            Console.WriteLine(error);
             return BadRequest("Business entered is not valid sorry");
         }
     }

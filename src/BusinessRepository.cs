@@ -85,8 +85,9 @@ public class BusinessRepository : BaseRepository, IRepository<Business>
 
     public async Task<Business> InsertbyBusiness(Business Business)
     {
+        
         using var connection = CreateConnection();
-        return await connection.QuerySingleAsync<Business>("INSERT INTO Business (auth0Id) VALUES (@Auth0Id) RETURNING *;", Business);
+        return await connection.QuerySingleAsync<Business>("INSERT INTO Business (auth0Id, BusinessName, PrimaryEmail, AddrLocation, BusinessLogo) VALUES (@Auth0Id, @BusinessName, @PrimaryEmail, @AddrLocation, @BusinessLogo) RETURNING *;", new Business{ Auth0Id = Business.Auth0Id, BusinessName = Business.BusinessName, PrimaryEmail = Business.PrimaryEmail, AddrLocation = Business.AddrLocation, BusinessLogo = Business.BusinessLogo});
     }
 
 
