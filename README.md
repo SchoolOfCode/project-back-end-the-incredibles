@@ -1,12 +1,26 @@
-### Installed packages:
+## The Brief
 
-- dotnet user secrets init
-- dotnet add package Dapper --version 2.0.78
-- dotnet add package Npgsql --version 5.0.3
-- dotnet add package Moq --version 4.16.1 
-### Yet to do:
-- set up xunit test
+This was our final project which we spent two weeks building for the School of Code Bootcamp.
 
+Our brief was to address the impact the pandemic has had on small businesses. We were tasked with the problem on how we can help them get up and running as the economy opens up and to make up for lost time.
 
-### notes:
-- will we need to make business model have a product felid that is just a list of products?
+## The Stack
+
+- React
+- JavaScript & TypeScript
+- Auth0
+- StoryBook
+- Stripe
+- PostgreSQL
+- ASP.NET & C#
+- Chakra UI
+- React Router
+- Node.js
+- Azure Blob Storage
+- Jest & xUnit
+- Trello
+- Heroku & Netlify
+
+## The Team
+
+[Liam](https://github.com/LiamIsBuilding), [Christina](https://github.com/steen4reals), [Nathan](https://github.com/NathanHinks), [Sara](https://github.com/Sparkii77), [Rob](https://github.com/GandalfHod)
